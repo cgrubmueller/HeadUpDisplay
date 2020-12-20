@@ -218,10 +218,10 @@ public class Anzeige_1 extends AppCompatActivity {
      * Display current state of battery (percentage) and update the icon accordingly.
      * @param batteryPercentage %
      */
-    public void setBattery(int batteryPercentage) {
+    public void setBattery(double batteryPercentage) {
         if ((batteryPercentage > 0) && (batteryPercentage <= 100)) {
             TextView batteryField = findViewById(R.id.akkuNumber);
-            batteryField.setText(batteryPercentage);
+            batteryField.setText("" + batteryPercentage);
             updateBatteryIcon(batteryPercentage);
         }
     }
@@ -230,7 +230,7 @@ public class Anzeige_1 extends AppCompatActivity {
      * Gets called in setBattery() and updates the icon of the battery
      * @param percentage %
      */
-    private void updateBatteryIcon(int percentage) {
+    private void updateBatteryIcon(double percentage) {
         ImageView icon = findViewById(R.id.akkuIcon);
         //0 - 32
         if (percentage < 33) {

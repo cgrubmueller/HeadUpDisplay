@@ -22,7 +22,7 @@ public class SpeedReader {
     public int getSpeed(BluetoothSocket socket) throws IOException, InterruptedException {
         this.speed.run(socket.getInputStream(), socket.getOutputStream());
         String result = this.speed.getFormattedResult();
-        int cache = Integer.parseInt(result.substring(0,result.indexOf("%")));
+        int cache = Integer.parseInt(result.substring(0,result.indexOf("km/h")));
         return cache;
     }
 

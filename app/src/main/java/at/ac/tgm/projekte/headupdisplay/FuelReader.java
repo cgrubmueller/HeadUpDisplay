@@ -19,10 +19,10 @@ public class FuelReader {
      * @throws IOException, wenn der Socket nicht korrekt ist
      * @throws InterruptedException
      */
-    public int getFuelLevel(BluetoothSocket socket) throws IOException, InterruptedException {
+    public double getFuelLevel(BluetoothSocket socket) throws IOException, InterruptedException {
         this.fuelLevel.run(socket.getInputStream(), socket.getOutputStream());
         String result = this.fuelLevel.getFormattedResult();
-        int cache = Integer.parseInt(result.substring(0,result.indexOf("km/h")));
+        double cache = Double.parseDouble(result.substring(0,result.indexOf("%")));
         return cache;
     }
 
