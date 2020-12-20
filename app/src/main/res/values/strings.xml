@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">HeadUpDisplay</string>
+    <string name="geschwLabel">km/h</string>
+    <string name="akkuLabel">%</string>
+    <string name="title_activity_navigation2">FullscreenActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="title_activity_navigation">Navigation</string>
+    <string name="anzeigeEins">Anzeige 1</string>
+    <string name="anzeigeZwei">Anzeige 2</string>
+    <string name="spiegelnButton">Spiegeln</string>
+</resources>
