@@ -4,19 +4,20 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.util.Log;
-import at.ac.tgm.projekte.headupdisplay.Anzeige_1;
+import at.ac.tgm.projekte.headupdisplay.MainActivity;
+import at.ac.tgm.projekte.headupdisplay.bluetooth.BluetoothException;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Set;
 import java.util.UUID;
+import java.util.Arrays;
 
 public class Utils {
-    private static final String TAG = Anzeige_1.class.getName();
+    private static final String TAG = MainActivity.class.getName();
     private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
-    private static final ArrayList<String> devicenames = new ArrayList<>(Arrays.asList("CBT", "KONNWEI","CAN OBDII", "JBL Clip 2"));
+    private static final ArrayList<String> devicenames = new ArrayList<>(Arrays.asList("CBT", "KONNWEI","CAN OBDII","JBL Clip 2"));
 
     public static BluetoothDevice getDevice() throws BluetoothException {
         BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -53,7 +54,6 @@ public class Utils {
         Log.d(TAG, "Starting Bluetooth connection..");
         try {
             sock = dev.createRfcommSocketToServiceRecord(MY_UUID);
-            System.out.println("Ist der Socket connected: " + sock.isConnected());
             sock.connect();
             System.out.println(sock.getRemoteDevice().getName());
         } catch (Exception e1) {

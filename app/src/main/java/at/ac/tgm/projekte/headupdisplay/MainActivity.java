@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Anzeige_1 extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity {
     private boolean spiegeln;
 
     //Auslesen
@@ -208,9 +208,9 @@ public class Anzeige_1 extends AppCompatActivity {
      * @param speed km/h
      */
     public void setSpeed(int speed) {
-        if (speed > 0) {
+        if (speed >= 0) {
             TextView speedField = findViewById(R.id.speed);
-            speedField.setText(speed);
+            speedField.setText(""+speed);
         }
     }
 
