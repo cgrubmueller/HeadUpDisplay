@@ -21,7 +21,7 @@ public class FuelReader {
      */
     public double getFuelLevel(BluetoothSocket socket) throws IOException, InterruptedException {
         this.fuelLevel.run(socket.getInputStream(), socket.getOutputStream());
-        String result = this.fuelLevel.getFormattedResult();
+        String result = this.fuelLevel.getFormattedResult().replace(",",".");
         double cache = Double.parseDouble(result.substring(0,result.indexOf("%")));
         return cache;
     }

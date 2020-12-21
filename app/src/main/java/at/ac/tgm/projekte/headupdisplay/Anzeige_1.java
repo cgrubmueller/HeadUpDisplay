@@ -50,6 +50,31 @@ public class Anzeige_1 extends AppCompatActivity {
             BluetoothDevice device = Utils.getDevice();
             System.out.println(device.getName());
             this.socket = Utils.getSocket(device);
+
+            //SpeedReader- und FuelReader-Objekte erstellen
+            this.speed = new SpeedReader();
+            this.fuel = new FuelReader();
+
+            //Updater-Objekt erstellen
+            updaterTime = new Updater(() -> {displayTime();}, 1000);
+
+            //Updater-Objekt erstellen
+            updaterData = new Updater(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        setSpeed(speed.getSpeed(socket));
+                        setBattery(fuel.getFuelLevel(socket));
+                    } catch (IOException e) {
+                        displayError(e.getMessage());
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        displayError(e.getMessage());
+                        e.printStackTrace();
+                    }
+                }
+            }, 500);// 500ms => 0.5s
+
         } catch (IOException e) {
             displayError(e.getMessage());
             e.printStackTrace();
@@ -57,31 +82,6 @@ public class Anzeige_1 extends AppCompatActivity {
             displayError(e.getMessage());
             e.printStackTrace();
         }
-
-        //SpeedReader- und FuelReader-Objekte erstellen
-        this.speed = new SpeedReader();
-        this.fuel = new FuelReader();
-
-        //Updater-Objekt erstellen
-        updaterTime = new Updater(() -> {displayTime();}, 1000);
-
-        //Updater-Objekt erstellen
-        updaterData = new Updater(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    setSpeed(speed.getSpeed(socket));
-                    setBattery(fuel.getFuelLevel(socket));
-                } catch (IOException e) {
-                    displayError(e.getMessage());
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    displayError(e.getMessage());
-                    e.printStackTrace();
-                }
-            }
-        }, 500);// 500ms => 0.5s
-
     }
 
     @Override
