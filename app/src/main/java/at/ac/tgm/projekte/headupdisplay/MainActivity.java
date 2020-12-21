@@ -1,11 +1,9 @@
 package at.ac.tgm.projekte.headupdisplay;
 
 import android.app.Activity;
-import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -22,14 +20,22 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
+    //spiegeln
     private boolean spiegeln;
-
-    //Auslesen
-    private SpeedReader speed;
-    private FuelReader fuel;
 
     //Bluetooth
     private BluetoothSocket socket;
+
+    //Fehleranzeige
+    private TextView errorView;
+
+    //Fahrdaten auslesen
+    private SpeedReader speed;
+    private FuelReader fuel;
+
+    //Fahrdaten auslese
+    private TextView speedView;
+    private TextView fuelView;
 
     //Updater
     private Updater updaterTime;
@@ -38,50 +44,47 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_anzeige_1);
+        errorView = findViewById(R.id.errorText);
 
-        //Screen um 90 Grad drehen
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        this.speedView = findViewById(R.id.speed);
+        this.fuelView = findViewById(R.id.akkuNumber);
 
-        //Mit Bluetooth verbinden
-        this.socket = null;
+        this.speed = new SpeedReader();
+        this.fuel = new FuelReader();
+
         try {
-            BluetoothDevice device = Utils.getDevice();
-            System.out.println(device.getName());
-            this.socket = Utils.getSocket(device);
-
-            //SpeedReader- und FuelReader-Objekte erstellen
-            this.speed = new SpeedReader();
-            this.fuel = new FuelReader();
-
-            //Updater-Objekt erstellen
-            updaterTime = new Updater(() -> {displayTime();}, 1000);
-
-            //Updater-Objekt erstellen
-            updaterData = new Updater(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        setSpeed(speed.getSpeed(socket));
-                        setBattery(fuel.getFuelLevel(socket));
-                    } catch (IOException e) {
-                        displayError(e.getMessage());
-                        e.printStackTrace();
-                    } catch (InterruptedException e) {
-                        displayError(e.getMessage());
-                        e.printStackTrace();
-                    }
-                }
-            }, 500);// 500ms => 0.5s
-
+            this.socket = Utils.getSocket(Utils.getDevice());
         } catch (IOException e) {
-            displayError(e.getMessage());
+            errorView.setText(e.getMessage());
             e.printStackTrace();
         } catch (BluetoothException e) {
-            displayError(e.getMessage());
+            errorView.setText(e.getMessage());
             e.printStackTrace();
         }
+
+        updaterTime = new Updater(new Runnable() {
+            @Override
+            public void run() {
+                displayTime();
+            }
+        },1000);
+
+        updaterData = new Updater(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    speedView.setText(speed.getFormattedSpeed(socket));
+                    fuelView.setText(fuel.getFormattedFuelLevel(socket));
+                } catch (IOException e) {
+                    errorView.setText("in run():    " + e.getMessage());
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    errorView.setText(e.getMessage());
+                    e.printStackTrace();
+                }
+            }
+        }, 500);// 500ms => 0.5s
     }
 
     @Override

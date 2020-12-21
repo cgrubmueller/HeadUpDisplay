@@ -35,6 +35,7 @@ public class FuelReader {
      */
     public String getFormattedFuelLevel(BluetoothSocket socket) throws IOException, InterruptedException {
         this.fuelLevel.run(socket.getInputStream(), socket.getOutputStream());
-        return this.fuelLevel.getFormattedResult();
+        String result = this.fuelLevel.getFormattedResult();
+        return result.substring(0,result.indexOf(','));
     }
 }
