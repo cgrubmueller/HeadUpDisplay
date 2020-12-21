@@ -1,4 +1,4 @@
-package at.ac.tgm.projekte.headupdisplay;
+package at.ac.tgm.hit.headupdisplayprototyp;
 
 import android.bluetooth.BluetoothSocket;
 import com.github.pires.obd.commands.fuel.FuelLevelCommand;
