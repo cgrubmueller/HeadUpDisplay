@@ -11,7 +11,7 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
         <activity
-                android:name="at.ac.tgm.projekte.headupdisplay.MainActivity"
+                android:name="at.ac.tgm.projekte.headupdisplay.Anzeige_1"
                 android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

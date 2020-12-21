@@ -4,8 +4,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.util.Log;
-import at.ac.tgm.projekte.headupdisplay.MainActivity;
-import at.ac.tgm.projekte.headupdisplay.bluetooth.BluetoothException;
+import at.ac.tgm.projekte.headupdisplay.Anzeige_1;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -15,7 +14,7 @@ import java.util.UUID;
 import java.util.Arrays;
 
 public class Utils {
-    private static final String TAG = MainActivity.class.getName();
+    private static final String TAG = Anzeige_1.class.getName();
     private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
     private static final ArrayList<String> devicenames = new ArrayList<>(Arrays.asList("CBT", "KONNWEI","CAN OBDII","JBL Clip 2"));
 

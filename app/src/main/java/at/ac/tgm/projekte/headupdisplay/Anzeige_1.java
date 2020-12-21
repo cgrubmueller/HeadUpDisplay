@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class MainActivity extends AppCompatActivity {
+public class Anzeige_1 extends AppCompatActivity {
     //spiegeln
     private boolean spiegeln;
 
@@ -53,8 +53,31 @@ public class MainActivity extends AppCompatActivity {
         this.speed = new SpeedReader();
         this.fuel = new FuelReader();
 
+        updaterTime = new Updater(new Runnable() {
+            @Override
+            public void run() {
+                displayTime();
+            }
+        },1000);
+
         try {
             this.socket = Utils.getSocket(Utils.getDevice());
+
+            updaterData = new Updater(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        speedView.setText(speed.getFormattedSpeed(socket));
+                        fuelView.setText(fuel.getFormattedFuelLevel(socket));
+                    } catch (IOException e) {
+                        errorView.setText(e.getMessage());
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        errorView.setText(e.getMessage());
+                        e.printStackTrace();
+                    }
+                }
+            }, 500);// 500ms => 0.5s
         } catch (IOException e) {
             errorView.setText(e.getMessage());
             e.printStackTrace();
@@ -63,13 +86,6 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        updaterTime = new Updater(new Runnable() {
-            @Override
-            public void run() {
-                displayTime();
-            }
-        },1000);
-
         updaterData = new Updater(new Runnable() {
             @Override
             public void run() {
@@ -77,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
                     speedView.setText(speed.getFormattedSpeed(socket));
                     fuelView.setText(fuel.getFormattedFuelLevel(socket));
                 } catch (IOException e) {
-                    errorView.setText("in run():    " + e.getMessage());
+                    errorView.setText(e.getMessage());
                     e.printStackTrace();
                 } catch (InterruptedException e) {
                     errorView.setText(e.getMessage());
