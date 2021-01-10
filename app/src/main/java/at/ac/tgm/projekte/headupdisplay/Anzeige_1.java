@@ -88,6 +88,8 @@ public class Anzeige_1 extends AppCompatActivity {
         } catch (BluetoothException e) {
             errorView.setText(e.getMessage());
             e.printStackTrace();
+        } catch(Exception e){
+            errorView.setText(e.getMessage());
         }
     }
 

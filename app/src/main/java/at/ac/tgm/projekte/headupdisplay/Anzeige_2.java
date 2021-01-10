@@ -1,9 +1,5 @@
 package at.ac.tgm.projekte.headupdisplay;
 
-import android.app.Activity;
-import android.bluetooth.BluetoothSocket;
-import android.content.Context;
-import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.MenuInflater;
@@ -13,9 +9,6 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
-import at.ac.tgm.projekte.headupdisplay.bluetooth.BluetoothException;
-import at.ac.tgm.projekte.headupdisplay.bluetooth.Utils;
-import at.ac.tgm.projekte.headupdisplay.Anzeige_1;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -47,11 +40,11 @@ public class Anzeige_2 extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        setContentView(R.layout.activity_anzeige_1);
-        errorView = findViewById(R.id.errorText);
+        setContentView(R.layout.activity_anzeige_2);
+        errorView = findViewById(R.id.errorText2);
 
-        this.speedView = findViewById(R.id.speed);
-        this.fuelView = findViewById(R.id.akkuNumber);
+        this.speedView = findViewById(R.id.speed2);
+        this.fuelView = findViewById(R.id.akkuNumber2);
 
         this.speed = new SpeedReader();
         this.fuel = new FuelReader();
@@ -158,27 +151,25 @@ public class Anzeige_2 extends AppCompatActivity {
     public void mirrorDisplay(View view) {
         this.spiegeln = !this.spiegeln;
         //Mirror Display of speed, label and icon
-        View temp = findViewById(R.id.speed);
+        View temp = findViewById(R.id.speed2);
         mirrorView(temp);
-        temp = findViewById(R.id.speedLabel);
-        mirrorView(temp);
-        temp = findViewById(R.id.speedIcon);
+        temp = findViewById(R.id.speedLabel2);
         mirrorView(temp);
         //Mirror battery and its label and icon
-        temp = findViewById(R.id.akkuIcon);
+        temp = findViewById(R.id.akkuIcon2);
         mirrorView(temp);
-        temp = findViewById(R.id.akkuNumber);
-        mirrorView(temp);
-        temp = findViewById(R.id.akkuLabel);
+        temp = findViewById(R.id.akkuNumber2);
         mirrorView(temp);
         //Mirror Popup Menu
-        temp = findViewById(R.id.option);
+        temp = findViewById(R.id.option2);
         mirrorView(temp);
         //Miror Mirror-Button
-        temp = findViewById(R.id.mirrorButton);
+        temp = findViewById(R.id.mirrorButton2);
         mirrorView(temp);
         //Mirror time
-        temp = findViewById(R.id.timeField);
+        temp = findViewById(R.id.timeField2);
+        mirrorView(temp);
+        temp = findViewById(R.id.errorText2);
         mirrorView(temp);
     }
 
@@ -212,7 +203,7 @@ public class Anzeige_2 extends AppCompatActivity {
      */
     public void setSpeed(int speed) {
         if (speed >= 0) {
-            TextView speedField = findViewById(R.id.speed);
+            TextView speedField = findViewById(R.id.speed2);
             speedField.setText("" + speed);
         }
     }
@@ -224,7 +215,7 @@ public class Anzeige_2 extends AppCompatActivity {
      */
     public void setBattery(double batteryPercentage) {
         if ((batteryPercentage > 0) && (batteryPercentage <= 100)) {
-            TextView batteryField = findViewById(R.id.akkuNumber);
+            TextView batteryField = findViewById(R.id.akkuNumber2);
             batteryField.setText("" + batteryPercentage);
             updateBatteryIcon(batteryPercentage);
         }
@@ -232,11 +223,10 @@ public class Anzeige_2 extends AppCompatActivity {
 
     /**
      * Gets called in setBattery() and updates the icon of the battery
-     *
      * @param percentage %
      */
     private void updateBatteryIcon(double percentage) {
-        ImageView icon = findViewById(R.id.akkuIcon);
+        ImageView icon = findViewById(R.id.akkuIcon2);
         //0 - 32
         if (percentage < 33) {
             icon.setImageResource(R.drawable.battery33);
@@ -258,7 +248,7 @@ public class Anzeige_2 extends AppCompatActivity {
      */
     public void displayError(String errorText) {
         if (errorText != null) {
-            TextView field = findViewById(R.id.errorText);
+            TextView field = findViewById(R.id.errorText2);
             field.setText(errorText);
         }
     }
@@ -267,7 +257,7 @@ public class Anzeige_2 extends AppCompatActivity {
      * Displays the current time in the UI.
      */
     public void displayTime() {
-        TextView timeField = (TextView) findViewById(R.id.timeField);
+        TextView timeField = (TextView) findViewById(R.id.timeField2);
         timeField.setText(getCurrentTime());
     }
 }
