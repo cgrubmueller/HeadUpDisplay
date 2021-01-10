@@ -1,7 +1,0 @@
-<resources>
-    <string name="app_name">HeadUpDisplayPrototyp</string>
-
-    <string name="Test_Button">CSV-Speichern</string>
-
-    <string name="CSV_delim_1">;</string>
-</resources>

@@ -15,6 +15,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import at.ac.tgm.projekte.headupdisplay.bluetooth.BluetoothException;
 import at.ac.tgm.projekte.headupdisplay.bluetooth.Utils;
+import at.ac.tgm.projekte.headupdisplay.Anzeige_1;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -25,7 +26,7 @@ public class Anzeige_2 extends AppCompatActivity {
     private boolean spiegeln;
 
     //Bluetooth
-    private BluetoothSocket socket;
+    //private BluetoothSocket socket;
 
     //Fehleranzeige
     private TextView errorView;
@@ -45,11 +46,12 @@ public class Anzeige_2 extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_anzeige_2);
-        errorView = findViewById(R.id.errorText2);
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        setContentView(R.layout.activity_anzeige_1);
+        errorView = findViewById(R.id.errorText);
 
-        this.speedView = findViewById(R.id.speed2);
-        this.fuelView = findViewById(R.id.akkuNumber2);
+        this.speedView = findViewById(R.id.speed);
+        this.fuelView = findViewById(R.id.akkuNumber);
 
         this.speed = new SpeedReader();
         this.fuel = new FuelReader();
@@ -59,17 +61,17 @@ public class Anzeige_2 extends AppCompatActivity {
             public void run() {
                 displayTime();
             }
-        }, 1000);
+        },1000);
 
-        try {
-            this.socket = Utils.getSocket(Utils.getDevice());
+        //try {
+            //Anzeige_1.socket = Utils.getSocket(Utils.getDevice());
 
             updaterData = new Updater(new Runnable() {
                 @Override
                 public void run() {
                     try {
-                        speedView.setText(speed.getFormattedSpeed(socket));
-                        fuelView.setText(fuel.getFormattedFuelLevel(socket));
+                        speedView.setText(speed.getFormattedSpeed(Anzeige_1.socket));
+                        fuelView.setText(fuel.getFormattedFuelLevel(Anzeige_1.socket));
                     } catch (IOException e) {
                         errorView.setText(e.getMessage());
                         e.printStackTrace();
@@ -79,13 +81,13 @@ public class Anzeige_2 extends AppCompatActivity {
                     }
                 }
             }, 500);// 500ms => 0.5s
-        } catch (IOException e) {
+        /*} catch (IOException e) {
             errorView.setText(e.getMessage());
             e.printStackTrace();
         } catch (BluetoothException e) {
             errorView.setText(e.getMessage());
             e.printStackTrace();
-        }
+        }*/
     }
 
     @Override
@@ -119,7 +121,7 @@ public class Anzeige_2 extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
 
-        this.socket = null;
+        //Anzeige_1.socket = null;
     }
 
     /**
@@ -136,23 +138,16 @@ public class Anzeige_2 extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getTitle().toString()) {
                     case "Anzeige 1":
-                        //gleiche Activity
+                        finish();
                         break;
                     case "Anzeige 2":
-                        Context context = getApplicationContext();
-                        Intent intent = new Intent(context, Anzeige_2.class);
-                        startActivity(intent);
+                        //gleiche Activity
                         break;
                 }
                 return false;
             }
         });
         popupMenu.show();
-    }
-
-    public void switchToSite(Activity activity) {
-        Intent intent = new Intent(this, activity.getClass());
-        startActivity(intent);
     }
 
     /**
@@ -193,7 +188,7 @@ public class Anzeige_2 extends AppCompatActivity {
      * @param view View to mirror
      */
     public void mirrorView(View view) {
-        if (this.spiegeln == false) {
+        if (!this.spiegeln) {
             view.setScaleX(-1);
             view.setScaleY(-1);
             view.setTranslationX(-1);

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -24,7 +25,7 @@ public class Anzeige_1 extends AppCompatActivity {
     private boolean spiegeln;
 
     //Bluetooth
-    private BluetoothSocket socket;
+    public static BluetoothSocket socket;
 
     //Fehleranzeige
     private TextView errorView;
@@ -44,6 +45,7 @@ public class Anzeige_1 extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         setContentView(R.layout.activity_anzeige_1);
         errorView = findViewById(R.id.errorText);
 
@@ -60,8 +62,10 @@ public class Anzeige_1 extends AppCompatActivity {
             }
         },1000);
 
+
+
         try {
-            this.socket = Utils.getSocket(Utils.getDevice());
+            socket = Utils.getSocket(Utils.getDevice());
 
             updaterData = new Updater(new Runnable() {
                 @Override
@@ -85,22 +89,6 @@ public class Anzeige_1 extends AppCompatActivity {
             errorView.setText(e.getMessage());
             e.printStackTrace();
         }
-
-        updaterData = new Updater(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    speedView.setText(speed.getFormattedSpeed(socket));
-                    fuelView.setText(fuel.getFormattedFuelLevel(socket));
-                } catch (IOException e) {
-                    errorView.setText(e.getMessage());
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    errorView.setText(e.getMessage());
-                    e.printStackTrace();
-                }
-            }
-        }, 500);// 500ms => 0.5s
     }
 
     @Override
@@ -134,7 +122,7 @@ public class Anzeige_1 extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
 
-        this.socket = null;
+        socket = null;
     }
 
     /**
@@ -162,11 +150,6 @@ public class Anzeige_1 extends AppCompatActivity {
             }
         });
         popupMenu.show();
-    }
-
-    public void switchToSite(Activity activity) {
-        Intent intent = new Intent(this, activity.getClass());
-        startActivity(intent);
     }
 
     /**
