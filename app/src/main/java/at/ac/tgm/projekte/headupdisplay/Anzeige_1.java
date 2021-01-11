@@ -71,8 +71,10 @@ public class Anzeige_1 extends AppCompatActivity {
                 @Override
                 public void run() {
                     try {
-                        speedView.setText(speed.getFormattedSpeed(socket));
-                        fuelView.setText(fuel.getFormattedFuelLevel(socket));
+                            setSpeed(speed.getFormattedSpeed(socket));
+                        //speedView.setText(speed.getFormattedSpeed(socket));
+                        setBattery(fuel.getFormattedFuelLevel(socket));
+                        //fuelView.setText(fuel.getFormattedFuelLevel(socket));
                     } catch (IOException e) {
                         errorView.setText(e.getMessage());
                         e.printStackTrace();
@@ -103,7 +105,11 @@ public class Anzeige_1 extends AppCompatActivity {
         super.onResume();
 
         updaterTime.startUpdates();
-        updaterData.startUpdates();
+        try {
+            updaterData.startUpdates();
+        } catch (NullPointerException e) {
+            errorView.setText("Es konnte keine Bluetoothverbindung hergestellt werden!");
+        }
 
     }
 
@@ -112,7 +118,11 @@ public class Anzeige_1 extends AppCompatActivity {
         super.onPause();
 
         updaterTime.stopUpdates();
-        updaterData.stopUpdates();
+        try {
+            updaterData.stopUpdates();
+        } catch (NullPointerException e) {
+            errorView.setText("Es konnte keine Bluetoothverbindung hergestellt werden!");
+        }
     }
 
     @Override
@@ -161,6 +171,9 @@ public class Anzeige_1 extends AppCompatActivity {
     public void mirrorDisplay(View view) {
         this.spiegeln = !this.spiegeln;
         //Mirror Display of speed, label and icon
+        View temp = findViewById(R.id.layout);
+        mirrorView(temp);
+        /*
         View temp = findViewById(R.id.speed);
         mirrorView(temp);
         temp = findViewById(R.id.speedLabel);
@@ -177,12 +190,13 @@ public class Anzeige_1 extends AppCompatActivity {
         //Mirror Popup Menu
         temp = findViewById(R.id.option);
         mirrorView(temp);
-        //Miror Mirror-Button
+        //Mirror Mirror-Button
         temp = findViewById(R.id.mirrorButton);
         mirrorView(temp);
         //Mirror time
         temp = findViewById(R.id.timeField);
         mirrorView(temp);
+        */
     }
 
     /**
@@ -191,13 +205,13 @@ public class Anzeige_1 extends AppCompatActivity {
      */
     public void mirrorView(View view) {
         if (this.spiegeln == false) {
-            view.setScaleX(-1);
+            //view.setScaleX(-1);
             view.setScaleY(-1);
-            view.setTranslationX(-1);
+            //view.setTranslationX(-1);
         } else {
-            view.setScaleX(1);
+            //view.setScaleX(1);
             view.setScaleY(1);
-            view.setTranslationX(1);
+            //view.setTranslationX(1);
         }
     }
 
@@ -209,24 +223,32 @@ public class Anzeige_1 extends AppCompatActivity {
 
     /**
      * Display new speed
-     * @param speed km/h
+     * @param speedString km/h String
      */
-    public void setSpeed(int speed) {
-        if (speed >= 0) {
-            TextView speedField = findViewById(R.id.speed);
-            speedField.setText(""+speed);
+    public void setSpeed(String speedString) {
+        try {
+            int speed = Integer.parseInt(speedString);
+            if (speed >= 0) {
+                this.speedView.setText(""+speed);
+            }
+        } catch(Exception ex) {
+            ex.printStackTrace();
         }
     }
 
     /**
      * Display current state of battery (percentage) and update the icon accordingly.
-     * @param batteryPercentage %
+     * @param batteryString %
      */
-    public void setBattery(double batteryPercentage) {
-        if ((batteryPercentage > 0) && (batteryPercentage <= 100)) {
-            TextView batteryField = findViewById(R.id.akkuNumber);
-            batteryField.setText("" + batteryPercentage);
-            updateBatteryIcon(batteryPercentage);
+    public void setBattery(String batteryString) {
+        try  {
+            int batteryPercentage  = Integer.parseInt(batteryString);
+            if ((batteryPercentage >= 0) && (batteryPercentage <= 100)) {
+                this.fuelView.setText("" + batteryPercentage);
+                updateBatteryIcon(batteryPercentage);
+            }
+        } catch(Exception ex) {
+            ex.printStackTrace();
         }
     }
 
